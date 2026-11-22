@@ -1,0 +1,1276 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff6ea">
+<title>LOTUS Défis — L’Aventure du lotus</title>
+<style>
+:root{color-scheme:light;--paper:#fffaf1;--ink:#362519;--line:#c5a88d;--accent:#843b20;--sage:#d6e0cb;--peach:#f8decc;--blue:#d8e6eb;--muted:#654d3d}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:linear-gradient(155deg,#f8e4d2,#fff9ef 45%,#e3ebde);font:1rem/1.55 system-ui,sans-serif;min-height:100vh}
+main{max-width:58rem;margin:auto;padding:clamp(.8rem,3vw,2rem)}
+header{display:flex;align-items:center;gap:1rem;margin:0 0 1.3rem}
+header img{width:clamp(4rem,16vw,7rem);border-radius:1rem}
+h1,h2,h3{line-height:1.15;font-family:Georgia,serif;margin:0 0 .5rem}
+h1{font-size:clamp(2rem,7vw,3.65rem)}
+h2{font-size:clamp(1.45rem,5vw,2.5rem)}
+p{margin:.45rem 0 1rem}
+nav,.actions{display:flex;flex-wrap:wrap;gap:.55rem;margin:.7rem 0}
+button,select,input{font:inherit;max-width:100%}
+button,select,input[type=number]{min-height:48px;padding:.5rem .85rem;border:1px solid var(--line);border-radius:.65rem;color:var(--ink);background:var(--paper)}
+button{cursor:pointer}
+button.primary,button[aria-current=page]{color:white;background:var(--accent);border-color:var(--accent)}
+button:disabled{cursor:default;opacity:.65}
+:focus-visible{outline:3px solid #17466a;outline-offset:3px}
+.card{background:var(--paper);padding:clamp(.9rem,4vw,2rem);border:1px solid var(--line);border-radius:1.15rem;margin-top:.85rem;min-width:0}
+.steps{list-style:none;padding:0;display:grid;gap:.4rem;grid-template-columns:repeat(3,minmax(0,1fr))}
+.steps li{border-radius:.5rem;padding:.55rem;background:var(--sage);font-weight:650;overflow-wrap:anywhere}
+.steps li[aria-current=step]{background:var(--peach);outline:2px solid var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.38rem;max-width:25rem;margin:1rem 0}
+.grid button{padding:.35rem;min-width:0;min-height:54px;background:var(--blue)}
+.grid button[data-active=true]{outline:2px solid var(--accent);background:var(--peach)}
+.notes button{background:var(--sage);min-width:3.5rem}
+.notice{background:var(--peach);padding:.6rem .9rem;border-radius:.55rem;font-weight:650}
+label{display:block;margin:.6rem 0 .25rem;font-weight:650}
+label.inline{display:flex;align-items:center;gap:.45rem}
+.inline input{width:1.3rem;height:1.3rem}
+dd{margin:0 0 .55rem}
+footer{color:var(--muted);padding:1rem 0}
+[hidden]{display:none!important}
+body.large{font-size:1.2rem}
+body.contrast{--paper:#fff;--ink:#17110e;--accent:#552410;--line:#674b37;--muted:#292019}
+@media(max-width:460px){.steps{grid-template-columns:1fr}.grid{gap:.25rem}.grid button{min-height:50px}}
+
+.activity{border:1px solid var(--line);border-radius:.8rem;padding:clamp(.7rem,3vw,1.3rem);margin-top:1rem}
+.activity summary{cursor:pointer;font-weight:650}
+.activity input:not([type=checkbox]),.activity select{display:block;border:1px solid var(--line);border-radius:.65rem;color:var(--ink);background:var(--paper);min-height:48px;padding:.5rem .7rem}
+.activity form>button{margin-top:.5rem}
+.editor-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:26rem;gap:.35rem;margin-top:.7rem}
+.editor-board button{min-width:0;padding:.25rem;overflow-wrap:anywhere}
+#defis-picker,#defis-filter{width:min(100%,30rem)}
+#defis-records{padding-inline-start:1.3rem}
+#defis-records li{margin:.25rem 0}
+.garden-preview{display:flex;flex-wrap:wrap;gap:.6rem;background:var(--sage);border:1px solid var(--line);border-radius:.85rem;padding:.8rem;margin-top:1rem}
+.garden-preview span{padding:.3rem .55rem;background:var(--paper);border-radius:.5rem}
+body[data-command-side=right] .play-actions{justify-content:flex-end}
+body[data-command-side=left] .play-actions{justify-content:flex-start}
+body[data-command-side=center] #defis-content .play-actions{justify-content:center}
+@media(max-width:480px){.activity button{overflow-wrap:anywhere}#defis-content .play-actions button{flex-basis:92%}}
+</style>
+</head>
+<body>
+<main>
+<header><img src="data:image/webp;base64,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" alt="" width="100" height="100"><div><h1>LOTUS Défis</h1><p>L’Aventure du lotus</p></div></header>
+<nav aria-label="Rubriques">
+<button type="button" data-page="aventure" aria-current="page">Aventure</button>
+<button type="button" data-page="defis">Carnet des défis</button>
+<button type="button" data-page="retraits">Retraits simulés</button>
+<button type="button" data-page="famille">Famille LOTUS</button>
+</nav>
+<details class="card"><summary>Accessibilité et son</summary>
+<label class="inline"><input type="checkbox" id="large"> Agrandir les textes</label>
+<label class="inline"><input type="checkbox" id="contrast"> Renforcer les contrastes</label>
+<label class="inline"><input type="checkbox" id="sound"> Activer les notes sonores</label>
+<p>Le jeu est jouable sans son, sans chronomètre et au clavier. Les notes sont aussi écrites.</p>
+</details>
+<section class="card" id="aventure" aria-labelledby="aventure-title">
+<h2 id="aventure-title" tabindex="-1">Ton aventure</h2>
+<p>Joue gratuitement, sans publicité. Traverse l’étang, découvre les cristaux et rejoue leurs notes pour ouvrir le jardin.</p>
+<button id="begin" type="button" class="primary">Commencer l’aventure</button>
+<div id="play" hidden>
+<ol class="steps" id="steps">
+<li>La Traversée des lotus</li><li>La Mine aux cristaux</li><li>Le Sentier des rythmes</li>
+</ol>
+<h3 id="chapter" tabindex="-1"></h3>
+<p id="instructions"></p>
+<div id="board" class="grid" role="group" aria-label="Plateau"></div>
+<div id="rhythm" hidden>
+<p id="sequence"></p>
+<div class="actions notes play-actions" aria-label="Notes" role="group">
+<button type="button" data-note="Do">Do</button>
+<button type="button" data-note="Mi">Mi</button>
+<button type="button" data-note="Sol">Sol</button>
+</div>
+<button id="rhythm-reset" type="button">Reprendre le rythme</button>
+</div>
+<div class="actions">
+<button id="hint" type="button">Afficher un indice</button>
+<button id="next" type="button" class="primary" hidden>Chapitre suivant</button>
+<button id="game-undo" type="button" hidden>Annuler le dernier geste</button>
+<button id="restart" type="button">Rejouer depuis le début</button>
+</div>
+</div>
+<p id="feedback" role="status"></p>
+<p id="storage" role="status"></p>
+</section>
+<section class="card" id="defis" aria-labelledby="defis-title" hidden>
+<h2 id="defis-title" tabindex="-1">Carnet des défis</h2>
+<p>Explore d’autres chemins dans l’étang, la mine, le sentier et le jardin. Tes découvertes restent sur cet appareil.</p>
+<label for="defis-filter">Afficher les défis</label>
+<select id="defis-filter">
+<option value="all">Tous les lieux</option><option value="etang">La Traversée des lotus</option>
+<option value="mine">La Mine aux cristaux</option><option value="rythme">Le Sentier des rythmes</option>
+<option value="jardin">Le Jardin du lotus</option>
+</select>
+<label for="defis-picker">Choisir un défi</label>
+<select id="defis-picker"></select>
+<div class="actions">
+<button id="defis-start" class="primary" type="button">Ouvrir le défi</button>
+<button id="defis-short" type="button">Défi de poche</button>
+</div>
+<p id="defis-count" role="status"></p>
+<section id="defis-panel" class="activity" aria-labelledby="defis-name" hidden>
+<h3 id="defis-name" tabindex="-1"></h3>
+<p id="defis-story"></p>
+<div id="defis-content"></div>
+<div class="actions">
+<button id="defis-undo" type="button" hidden>Annuler le dernier geste</button>
+<button id="defis-hint" type="button" hidden>Indice</button>
+<button id="defis-read" type="button" hidden>Écouter la consigne</button>
+<button id="defis-reset" type="button">Recommencer ce défi</button>
+</div>
+<p id="defis-status" role="status"></p>
+</section>
+<details class="activity">
+<summary>Mes découvertes</summary>
+<p id="defis-empty">Tes découvertes apparaîtront ici après un défi réussi.</p>
+<ul id="defis-records"></ul>
+</details>
+<p id="defis-storage" role="status"></p>
+</section>
+<section class="card" id="retraits" aria-labelledby="retraits-title" hidden>
+<h2 id="retraits-title" tabindex="-1">Retirer mes gains</h2>
+<p class="notice">Simulation : le solde est fictif. Aucun argent ne peut être retiré.</p>
+<p>Solde fictif disponible : <strong id="balance"></strong></p>
+<form id="withdraw">
+<label for="amount">Montant du retrait fictif (€)</label>
+<input id="amount" type="number" min=".01" max="10" step=".01" value="5" inputmode="decimal" required>
+<label for="method">Destination du retrait</label>
+<select id="method">
+<option>PayPal</option><option>Revolut</option><option>Wise</option><option>Virement bancaire</option>
+</select>
+<div class="actions"><button type="submit" class="primary">Vérifier mon retrait fictif</button></div>
+</form>
+<section id="review" hidden aria-labelledby="review-title">
+<h3 id="review-title" tabindex="-1">Vérifier la simulation</h3>
+<dl><dt>Destination</dt><dd id="review-method"></dd><dt>Frais pour le joueur</dt><dd>0 €</dd>
+<dt>Montant net fictif</dt><dd id="review-amount"></dd><dt>Délai</dt><dd>Confirmation immédiate dans cette simulation. Le délai réel reste à définir.</dd></dl>
+<div class="actions"><button id="confirm" class="primary" type="button">Confirmer la simulation</button><button id="edit" type="button">Modifier</button></div>
+</section>
+<p id="withdraw-status" role="status"></p>
+<h3>Suivre mes retraits simulés</h3>
+<p id="empty-history">Aucun retrait simulé.</p><ul id="history"></ul>
+</section>
+<section class="card" id="famille" aria-labelledby="famille-title" hidden>
+<h2 id="famille-title" tabindex="-1">Famille LOTUS</h2>
+<p>LOTUS Défis est gratuit, sans publicité. La formule Famille LOTUS à 99 € en paiement unique est prévue et inclut le jeu. Elle ne conditionne ni l’accès au jeu ni les retraits prévus.</p>
+<p>Aucun achat n’est proposé dans cette version.</p>
+</section>
+<footer>LOTUS Défis · Version de démonstration</footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const storageKey = 'lotus-defis-prototype-v1';
+const methods = ['PayPal','Revolut','Wise','Virement bancaire'];
+const noteNames = ['Do','Mi','Sol'];
+const titles = ['La Traversée des lotus','La Mine aux cristaux','Le Sentier des rythmes','Le Jardin du lotus'];
+const directions = ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'];
+const start = {chapter:0, position:0, found:[], rhythm:0};
+let game = freshGame();
+let settings = {large:false,contrast:false,sound:false};
+let history = [];
+let pending = null;
+let audioContext;
+function freshGame() {
+  return {...start, found:[]};
+}
+function atMostInteger(value, maximum) {
+  return Number.isInteger(value) && value >= 0 && value <= maximum;
+}
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem(storageKey));
+    const g = data?.game;
+    if (g && atMostInteger(g.chapter,3) && atMostInteger(g.position,15) &&
+        atMostInteger(g.rhythm,3) && Array.isArray(g.found) && g.found.length <= 3 &&
+        new Set(g.found).size === g.found.length && g.found.every(note => noteNames.includes(note)) &&
+        (g.chapter < 2 || g.found.length === 3)) game = g;
+    for (const key of Object.keys(settings)) settings[key] = data?.settings?.[key] === true;
+    if (Array.isArray(data?.history)) {
+      history = data.history.filter(item => item && methods.includes(item.method) &&
+        atMostInteger(item.amount,1000) && item.amount > 0).slice(0,1000);
+      if (spent() > 1000) history = [];
+    }
+  } catch {
+    $('storage').textContent = 'La sauvegarde locale n’a pas pu être lue.';
+  }
+}
+function save() {
+  snapshotProfile();
+  try {
+    localStorage.setItem(storageKey, JSON.stringify({game,settings,history,challenges:{progress,profiles,activeProfile}}));
+    $('storage').textContent = '';
+  } catch {
+    $('storage').textContent = 'La sauvegarde locale est indisponible. Cette session reste jouable.';
+  }
+}
+function showPage(page) {
+  for (const button of document.querySelectorAll('[data-page]')) {
+    const active = button.dataset.page === page;
+    $(button.dataset.page).hidden = !active;
+    if (active) button.setAttribute('aria-current','page');
+    else button.removeAttribute('aria-current');
+  }
+  if (page !== 'defis') {
+    playing = false;
+    playToken++;
+  }
+  $(page + '-title').focus();
+}
+for (const button of document.querySelectorAll('[data-page]')) {
+  button.addEventListener('click', () => showPage(button.dataset.page));
+}
+const pond = new Set([0,1,5,6,10,11,15]);
+const mine = new Map([[2,'Mi'],[8,'Do'],[13,'Sol']]);
+const rocks = new Set([5,7,12]);
+function connected(from,to) {
+  return Math.abs(Math.floor(from / 4) - Math.floor(to / 4)) + Math.abs(from % 4 - to % 4) === 1;
+}
+function playNote(note) {
+  if (!settings.sound) return;
+  try {
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context) return;
+    audioContext ||= new Context();
+    void audioContext.resume().catch(() => {});
+    const sound = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const now = audioContext.currentTime;
+    sound.frequency.value = {Do:261.63,Mi:329.63,Sol:392}[note];
+    gain.gain.setValueAtTime(.12,now);
+    gain.gain.exponentialRampToValueAtTime(.001,now + .28);
+    sound.connect(gain).connect(audioContext.destination);
+    sound.start(now);
+    sound.stop(now + .3);
+  } catch { /* Les notes écrites restent disponibles. */ }
+}
+function move(index) {
+  if (!connected(game.position,index)) {
+    $('feedback').textContent = 'Choisis une case voisine, à côté ou au-dessus de la grenouille.';
+    return;
+  }
+  if ((game.chapter === 0 && !pond.has(index)) || (game.chapter === 1 && rocks.has(index))) {
+    $('feedback').textContent = game.chapter === 0 ? 'De l’eau ! Choisis un lotus voisin.' : 'Un rocher bloque ce passage.';
+    return;
+  }
+  rememberMove();
+  game.position = index;
+  const note = game.chapter === 1 ? mine.get(index) : null;
+  if (note && !game.found.includes(note)) {
+    game.found.push(note);
+    playNote(note);
+    $('feedback').textContent = 'Cristal découvert : ' + note + '.';
+  } else {
+    $('feedback').textContent = 'La grenouille avance.';
+  }
+  save();
+  renderGame(index);
+}
+function renderGame(focusIndex) {
+  const {chapter, position, found, rhythm} = game;
+  $('chapter').textContent = titles[chapter];
+  [...$('steps').children].forEach((step,index) => {
+    if (index === chapter) step.setAttribute('aria-current','step');
+    else step.removeAttribute('aria-current');
+  });
+  $('instructions').textContent = [
+    'Avance d’un lotus voisin à l’autre jusqu’à la dernière case.',
+    'Explore la mine et récupère les trois cristaux. Notes trouvées : ' + found.length + ' sur 3.',
+    'Rejoue les notes dans l’ordre où tu as trouvé les cristaux.',
+    'Le jardin est ouvert ! Tu as relié la traversée, les cristaux et le rythme.'
+  ][chapter];
+  $('next').hidden = !((chapter === 0 && position === 15) || (chapter === 1 && found.length === 3));
+  $('hint').hidden = chapter === 3;
+  $('game-undo').hidden = gameUndo.length === 0;
+  $('rhythm').hidden = chapter !== 2;
+  $('board').hidden = chapter > 1;
+  $('board').replaceChildren();
+  if (chapter < 2) {
+    for (let i = 0; i < 16; i++) {
+      const button = document.createElement('button');
+      const crystal = chapter === 1 && mine.has(i) && !found.includes(mine.get(i));
+      const tile = chapter === 0 ? (pond.has(i) ? [i===15?'🏁':'🪷',i===15?'arrivée':'lotus'] : ['≈','eau'])
+        : (rocks.has(i) ? ['◼','rocher'] : crystal ? ['◆','cristal'] : ['·','passage']);
+      button.type = 'button';
+      button.textContent = i === position ? '🐸' : tile[0];
+      button.dataset.active = String(i === position);
+      button.setAttribute('aria-label', 'Ligne ' + (Math.floor(i/4)+1) + ', colonne ' + (i%4+1) + ' : ' + (i===position?'grenouille sur ': '') + tile[1]);
+      button.addEventListener('click', () => move(i));
+      button.addEventListener('keydown', event => {
+        if (!directions.includes(event.key)) return;
+        event.preventDefault();
+        const target = i + ({ArrowLeft:-1,ArrowRight:1,ArrowUp:-4,ArrowDown:4})[event.key];
+        if (target >= 0 && target < 16 && connected(i,target)) $('board').children[target].focus();
+      });
+      $('board').append(button);
+    }
+    if (Number.isInteger(focusIndex)) $('board').children[focusIndex]?.focus();
+  }
+  $('sequence').textContent = 'Notes trouvées : ' + found.join(' → ') + '. Notes réussies : ' + rhythm + ' sur 3.';
+}
+$('begin').addEventListener('click', () => {
+  $('begin').hidden = true;
+  $('play').hidden = false;
+  renderGame();
+  $('chapter').focus();
+});
+$('next').addEventListener('click', () => {
+  if ($('next').hidden) return;
+  rememberMove();
+  game.chapter++;
+  game.position = 0;
+  $('feedback').textContent = 'Nouveau chapitre.';
+  save();
+  renderGame();
+  $('chapter').focus();
+});
+$('restart').addEventListener('click', () => {
+  if (game.chapter !== 3 && !window.confirm('Recommencer l’aventure depuis le premier chapitre ?')) return;
+  gameUndo.length = 0;
+  game = freshGame();
+  $('feedback').textContent = 'Nouvelle aventure.';
+  save();
+  renderGame();
+  $('chapter').focus();
+});
+$('hint').addEventListener('click', () => {
+  const nextPond = [...pond][[...pond].indexOf(game.position)+1];
+  $('feedback').textContent = [
+    nextPond === undefined ? 'La traversée est terminée.' : 'Prochain lotus : ligne ' + (Math.floor(nextPond/4)+1) + ', colonne ' + (nextPond%4+1) + '.',
+    'Cherche les cases marquées d’un losange. Tu peux revenir sur tes pas.',
+    'La prochaine note est ' + (game.found[game.rhythm] || 'déjà jouée') + '.'
+  ][game.chapter];
+});
+for (const button of document.querySelectorAll('[data-note]')) {
+  button.addEventListener('click', () => {
+    if (game.chapter !== 2) return;
+    const note = button.dataset.note;
+    playNote(note);
+    if (game.found[game.rhythm] !== note) {
+      $('feedback').textContent = 'Essaie une autre note. Les notes déjà réussies sont conservées.';
+      return;
+    }
+    rememberMove();
+    game.rhythm++;
+    if (game.rhythm === 3) {
+      game.chapter = 3;
+      $('feedback').textContent = 'Aventure réussie !';
+    } else $('feedback').textContent = 'Bonne note : ' + note + '.';
+    save();
+    renderGame();
+    if (game.chapter === 3) $('chapter').focus();
+  });
+}
+$('rhythm-reset').addEventListener('click', () => {
+  if (game.chapter !== 2) return;
+  rememberMove();
+  game.rhythm = 0;
+  save();
+  renderGame();
+  $('feedback').textContent = 'Tu peux rejouer depuis la première note.';
+});
+function spent() {
+  return history.reduce((total,item) => total+item.amount,0);
+}
+function euro(cents) {
+  return new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR'}).format(cents/100);
+}
+function renderWithdraw() {
+  $('balance').textContent = euro(1000-spent());
+  $('history').replaceChildren();
+  $('empty-history').hidden = history.length > 0;
+  history.forEach(item => {
+    const line = document.createElement('li');
+    line.textContent = item.method + ' · ' + euro(item.amount) + ' · Simulation terminée';
+    $('history').append(line);
+  });
+}
+$('withdraw').addEventListener('submit', event => {
+  event.preventDefault();
+  const amount = Math.round($('amount').valueAsNumber * 100);
+  const method = $('method').value;
+  if (!atMostInteger(amount,1000-spent()) || amount === 0 || !methods.includes(method)) {
+    $('withdraw-status').textContent = 'Saisis un montant compris entre 0,01 € et ton solde fictif.';
+    return;
+  }
+  pending = {amount,method};
+  $('withdraw-status').textContent = '';
+  $('review-method').textContent = method;
+  $('review-amount').textContent = euro(amount);
+  $('withdraw').hidden = true;
+  $('review').hidden = false;
+  $('review-title').focus();
+});
+function closeReview() {
+  pending = null;
+  $('review').hidden = true;
+  $('withdraw').hidden = false;
+}
+$('edit').addEventListener('click', () => {
+  closeReview();
+  $('amount').focus();
+});
+$('confirm').addEventListener('click', () => {
+  if (!pending) return;
+  if (pending.amount > 1000-spent()) {
+    closeReview();
+    $('withdraw-status').textContent = 'Le solde fictif a changé. Vérifie le montant.';
+    return;
+  }
+  history.unshift(pending);
+  closeReview();
+  save();
+  renderWithdraw();
+  $('withdraw-status').textContent = 'Simulation enregistrée. Aucun virement réel n’a été effectué.';
+  $('retraits-title').focus();
+});
+load();
+for (const key of Object.keys(settings)) {
+  const input = $(key);
+  input.checked = settings[key];
+  if (key !== 'sound') document.body.classList.toggle(key, settings[key]);
+  input.addEventListener('change', () => {
+    settings[key] = input.checked;
+    if (key !== 'sound') document.body.classList.toggle(key, input.checked);
+    save();
+  });
+}
+if (game.chapter || game.position) $('begin').textContent = 'Reprendre l’aventure';
+renderWithdraw();
+
+// Les réponses stockent l’index du choix, les séquences stockent les index des gestes.
+const challenges = [];
+function choices(id, place, title, intro, ...steps) {
+  challenges.push({id, place, title, intro, steps});
+}
+function sequence(id, place, title, intro, labels, answer, hint) {
+  challenges.push({id, place, title, intro, labels, answer, hint});
+}
+function atelier(id, place, title, intro, fields, kind = 'texte') {
+  challenges.push({id, place, title, intro, fields, kind});
+}
+function route(id, place, title, intro, labels, accepted, hint) {
+  challenges.push({id, place, title, intro, labels, answer:accepted[0], accepted, hint});
+}
+atelier('restaurer','jardin','Le jardin à restaurer','Ajoute trois plantes à ton jardin et compose ton paysage.',[
+  ['Bassin','Lotus rose','Lotus ivoire','Menthe d’eau'],['Bordure','Iris','Fougères','Roseaux'],['Coin ombragé','Mousse','Violettes','Trèfle']
+], 'jardin');
+choices('secrets','mine','Passages secrets et cristaux rares','Les marques au mur indiquent les passages qui cachent un cristal.',
+  ['Une spirale figure deux fois sur le même mur. Quel bloc examiner ?', ['Bloc à trois points','Bloc en spirale','Bloc lisse'],1,'Cherche le motif répété.'],
+  ['La porte chante Do, Mi. La note du cristal doit compléter Do, Mi, Sol.', ['Ré','Do','Sol'],2,'La dernière note se trouve en haut de la marche.']);
+atelier('modes','jardin','Sérénité et Défi','Choisis comment jouer dans le carnet.', [['Mode','Sérénité — indices disponibles dès le début','Défi — consignes seules jusqu’au premier essai']], 'mode');
+atelier('carnet','jardin','Le carnet de découvertes','Écris un souvenir de ton aventure.', [['Titre'],['Souvenir']]);
+route('deux-chemins','etang','L’étang aux deux chemins','Choisis la rive nord ou la rive sud. Chacune a sa propre entrée dans la mine.',
+  ['Lotus nord','Lotus sud','Entrée des échos','Entrée des sources'],[[0,2],[1,3]],'Le nord mène aux échos. Le sud mène aux sources.');
+sequence('jumeaux','mine','Les cristaux jumeaux','Associe les cristaux par leur forme pour faire sonner deux accords.',
+  ['Rond Do','Triangle Mi','Rond Sol','Triangle Do'],[0,2,1,3],'Deux ronds ensemble, puis deux triangles.');
+sequence('tambour','rythme','Le tambour des échos','L’écho répond à Do → Sol → Mi → Do. Rejoue les notes en sens inverse.',
+  ['Do','Mi','Sol'],[0,1,2,0],'Commence par le dernier Do.');
+choices('habitants','etang','Les habitants de la rive','Aide trois habitants, un à chaque étape du voyage.',
+  ['La libellule veut traverser sans mouiller ses ailes.', ['Tendre un roseau','Remuer l’eau'],0,'Un appui au-dessus de l’eau.'],
+  ['Dans la mine, un grillon cherche un passage éclairé.', ['Suivre le tunnel sombre','Poser le cristal lumineux'],1,'Utilise la lumière du cristal.'],
+  ['Le crapaud a oublié le début de son air. Sa partition commence sur Do.', ['Jouer Do','Jouer Sol'],0,'Reprends la première note écrite.']);
+atelier('melodies','rythme','L’atelier de mélodies','Compose, sauvegarde et rejoue ta mélodie.',[
+  ['Titre'],['Note 1','Do','Mi','Sol'],['Note 2','Do','Mi','Sol'],['Note 3','Do','Mi','Sol'],['Note 4','Do','Mi','Sol']
+], 'musique');
+sequence('aventure-deux','etang','L’aventure à deux','Personne 1 choisit le lotus de départ. Passe l’iPad. Personne 2 choisit le cristal rond. La première personne termine par Sol.',
+  ['Lotus de départ','Lotus d’arrivée','Cristal rond','Cristal pointu','Do','Sol'],[0,2,5],'Jouez chacun votre tour.');
+choices('douceur','jardin','Les défis en douceur','Gagne un insigne du jardin en terminant deux objectifs facultatifs.',
+  ['Prépare un coin pour les papillons. Quel emplacement ensoleillé choisir ?', ['Sous le pont','Près du bassin ouvert'],1,'Le soleil atteint le bassin.'],
+  ['Ajoute une fleur et un abri.', ['Un pétale et une feuille large','Deux pierres lisses'],0,'Il faut quelque chose pour se nourrir et s’abriter.']);
+atelier('guide','jardin','Le guide de la grenouille','Retrouve ta position et les prochaines étapes de l’aventure, en texte ou en lecture facultative.',[], 'guide');
+sequence('fleur-talents','etang','La fleur des trois talents','Traverse par le lotus rayé, choisis le cristal rond et termine avec Mi → Sol. Chaque étape complète un pétale.',
+  ['Lotus rayé','Lotus lisse','Cristal rond','Cristal carré','Mi','Sol'],[0,2,4,5],'Le cristal rond vient après le lotus rayé.');
+route('echos-passage','rythme','Les échos du passage','Le lotus rond garde Mi → Do. Le lotus dentelé garde Sol → Mi. Choisis un lotus et rejoue sa mélodie.',
+  ['Lotus rond','Lotus dentelé','Do','Mi','Sol'],[[0,3,2],[1,4,3]],'La mélodie dépend de la feuille que tu as choisie.');
+choices('pluie','etang','La pluie sur l’étang','La pluie fait apparaître les feuilles sous la surface.',
+  ['Deux feuilles remontent. Celle qui a trois points prolonge la rive.', ['Feuille à trois points','Feuille à un trait'],0,'Les points sont visibles et nommés.'],
+  ['Une nouvelle feuille ovale atteint l’autre bord.', ['Feuille ronde','Feuille ovale'],1,'Suivre la forme annoncée.']);
+atelier('editeur','etang','Mon carnet de niveaux','Place des lotus et des rochers sur un plateau à partager sur cet iPad.', [
+  ['Nom du niveau'],['Case 2','Lotus','Rocher','Eau'],['Case 3','Lotus','Rocher','Eau'],
+  ['Case 4','Lotus','Rocher','Eau'],['Case 5','Lotus','Rocher','Eau'],
+  ['Case 6','Lotus','Rocher','Eau'],['Case 7','Lotus','Rocher','Eau'],['Case 8','Lotus','Rocher','Eau']
+], 'niveau');
+atelier('reprise','jardin','Reprendre à la dernière étape','Rejoins ton point de passage dans l’aventure principale.',[], 'guide');
+atelier('rythme-accessible','rythme','Mode rythme accessible','Ajuste le tempo et choisis les repères de l’atelier de mélodies.',[
+  ['Tempo','Lent','Normal','Rapide'],['Repères','Symboles et noms','Son et symboles','Son avec bouton de lecture']
+], 'tempo');
+atelier('tenues','jardin','Tenues et décors à débloquer','Choisis la tenue de ta grenouille et son décor.',[
+  ['Foulard','Sauge','Pêche','Ivoire'],['Décor','Bassin calme','Parade de pétales','Lanternes de fête']
+], 'tenue');
+sequence('retourner','etang','La carte à retourner','L’entrée est à l’ouest, la sortie au nord. Oriente l’îlot vers le nord puis traverse.',
+  ['Tourner vers le nord','Tourner vers le sud','Traverser'],[0,2],'Aligne le passage sur la sortie.');
+sequence('riviere','mine','La rivière souterraine','Le canal arrive de l’ouest. Tourne la vanne ouest, puis la vanne nord qui mène au moulin. Lève la passerelle.',
+  ['Vanne ouest','Vanne nord','Vanne sud','Lever la passerelle'],[0,1,3],'L’eau doit passer devant le moulin avant de lever le pont.');
+sequence('nuit','jardin','Le jardin de nuit','Rallume trois scènes dans l’ordre du voyage. L’étang révèle le départ, la mine la découverte, le sentier le retour.',
+  ['Luciole de l’étang · le départ','Luciole de la mine · la découverte','Luciole du sentier · le retour'],[0,1,2],'Suis l’ordre des trois chapitres.');
+atelier('foulard','jardin','Le foulard des souvenirs','Choisis ton motif. Le foulard affiche aussi les derniers lieux où tu as terminé un défi.',[
+  ['Motif','Losanges','Vagues','Pétales']
+], 'foulard');
+atelier('orchestre','rythme','La fête des grenouilles','Choisis l’ordre d’entrée des trois instruments et écoute la version courte de ton orchestre.',[
+  ['Premier','Tambour','Roseau','Cloche'],['Deuxième','Tambour','Roseau','Cloche'],['Troisième','Tambour','Roseau','Cloche']
+], 'musique');
+route('second-regard','etang','Le deuxième regard','Choisis une luciole qui connaît la galerie obscure ou une libellule qui survole les tiges.',
+  ['Luciole','Libellule','Galerie obscure','Au-dessus des tiges'],[[0,2],[1,3]],'Chaque personnage a un passage.');
+atelier('indices','jardin','Les indices par étapes','Dans chaque défi, le bouton Indice donne une piste, puis réduit les choix, puis montre le geste utile. Essaie avec cette énigme.',[], 'indices');
+sequence('reflets','etang','Le pont des reflets','Reflet lu depuis la rive : à gauche un lotus, au milieu un rocher, à droite le dernier lotus. Le rocher est infranchissable.',
+  ['Lotus gauche','Rocher central','Lotus droit'],[0,2],'Saute de feuille en feuille.');
+sequence('prisme','mine','La lanterne prismatique','La source est à gauche. Oriente le premier cristal vers le haut et le second vers la droite pour éclairer la porte.',
+  ['Cristal 1 vers le haut','Cristal 1 vers le bas','Cristal 2 vers la droite','Cristal 2 vers la gauche'],[0,2],'Suis la direction de la porte.');
+sequence('duo','etang','Le duo des rives','À deux. Orientez un lotus puis sautez dessus. Sur la deuxième rive, échangez les rôles.',
+  ['Orienter le lotus 1','Sauter sur le lotus 1','Orienter le lotus 2','Sauter sur le lotus 2'],[0,1,2,3],'Un saut seulement après le placement.');
+sequence('monde','rythme','Les rythmes du monde','Rejoue cette composition originale à deux timbres. La fiche présente le likembe, instrument à lamelles que l’on pince.', 
+  ['Lamelle','Tambour'],[0,1,0,0,1],'Lamelle, tambour, deux lamelles, tambour.');
+atelier('postale','jardin','La carte postale du voyage','Compose une carte à enregistrer sur ton appareil.',[
+  ['Scène','Étang des lotus','Mine aux cristaux','Sentier des rythmes'],['Ton souvenir']
+], 'carte');
+choices('entrainement','rythme','L’atelier d’entraînement','Répète des gestes sans modifier ton aventure.',
+  ['Oriente le cristal vers la sortie située à gauche.', ['Gauche','Droite'],0,'La position de la sortie est donnée dans la consigne.'],
+  ['Complète Do, Mi, … pour monter encore.', ['Do','Sol'],1,'Des deux notes proposées, Sol est la plus haute.']);
+choices('saisons','jardin','La serre des saisons','Chaque saison demande un geste différent au jardin.',
+  ['Au printemps, prépare un pot à semer.', ['Mettre des graines en terre','Cueillir des feuilles sèches'],0,'Le printemps est la période du semis ici.'],
+  ['En été, le pot est sec.', ['Ajouter une décoration','Arroser'],1,'Il manque de l’eau.'],
+  ['En automne, des feuilles larges sont tombées.', ['Faire un radeau','Jouer un cristal'],0,'Les feuilles flottent.'],
+  ['En hiver, la mine résonne : goutte grave, goutte aiguë.', ['Aiguë puis grave','Grave puis aiguë'],1,'Suis l’ordre décrit.']);
+choices('barque','etang','La barque des passeurs','La barque doit porter quatre unités de poids de chaque côté.',
+  ['Comment répartir un cristal de poids 4 et deux sacs de poids 2 ?', ['Cristal à gauche, sacs à droite','Cristal et un sac d’un côté'],0,'Quatre de chaque côté.']);
+choices('lettres','jardin','Les lettres sous les feuilles','« Chère grenouille, j’ai oublié la note du milieu dans Do, …, Sol. Peux-tu la retrouver ? »',
+  ['Quelle note renvoyer dans la lettre ?', ['Sol','Mi','Do'],1,'Elle est entre Do et Sol.']);
+sequence('ombres','jardin','Le théâtre d’ombres','Fabrique l’ombre du lapin. Les pointes des deux feuilles forment ses oreilles.',
+  ['Feuille gauche pointe haute','Feuille gauche pointe basse','Feuille droite pointe haute','Feuille droite pointe basse'],[0,2],'Les oreilles pointent vers le haut.');
+sequence('remonter','mine','Le chemin à remonter','Prends le cristal lumineux, reviens vers l’étang, puis éclaire l’ancien passage.',
+  ['Prendre le cristal','Revenir à l’étang','Éclairer le passage','Éteindre la lanterne'],[0,1,2],'Retour à l’étang avant d’utiliser le cristal.');
+choices('poche','jardin','Le défi de poche','Une énigme que tu peux quitter et reprendre.',
+  ['Je flotte et je porte la grenouille. Qui suis-je ?', ['Un cristal','Un lotus','Un tambour'],1,'On me trouve sur l’étang.']);
+route('graines','etang','Les graines voyageuses','Prends une graine et plante-la près de l’eau pour faire un pont ou dans la mine pour éclairer les murs. Rapporte ensuite une pousse au jardin.',
+  ['Prendre la graine','Planter près de l’eau','Planter dans la mine','Rapporter une pousse'],[[0,1,3],[0,2,3]],'Les deux lieux de plantation fonctionnent.');
+sequence('emprunteur','mine','Le cristal emprunteur','Le verrou réagit à la goutte et au caillou. Capture ces deux sons du décor, puis rejoue-les près de la porte.',
+  ['💧 Goutte','◈ Caillou','❧ Feuille','Rejouer au verrou'],[0,1,3],'La goutte précède le caillou.');
+sequence('roseau','rythme','Le roseau à fabriquer','Place une tige longue, une moyenne et une courte, puis essaie ta flûte.',
+  ['Tige courte · Sol','Tige longue · Do','Tige moyenne · Mi','Essayer la flûte'],[1,2,0,3],'Commence par la tige la plus longue.');
+route('sac','etang','Le sac des solutions','Fabrique une traversée avec corde et roseau, ou grand lotus et galet.',
+  ['Corde','Roseau','Grand lotus','Galet','Traverser'],[[0,1,4],[2,3,4]],'Deux assemblages sont possibles.');
+atelier('fresque','jardin','La fresque du jardin','Choisis une pièce rapportée de chaque chapitre pour composer ta mosaïque.',[
+  ['Étang','Lotus rayé','Reflet du pont'],['Mine','Cristal rond','Vanne du moulin'],['Sentier','Tambour','Roseau']
+], 'jardin');
+atelier('annuler','jardin','Annuler mon dernier geste','Dans les défis à plusieurs gestes, utilise « Annuler le dernier geste ». Dans l’aventure, le même bouton revient à ton dernier point de passage.',[], 'guide');
+sequence('derive','etang','Le rythme qui fait bouger l’étang','Au départ, le lotus est loin de la rive. Il s’approche d’une case par battement. Attends deux battements, puis saute.',
+  ['Battement suivant','Sauter'],[0,0,1],'Deux battements rapprochent le lotus.');
+sequence('libellule','etang','La grenouille et la libellule','Survole l’îlot avec la libellule. La vue du ciel révèle un levier en croix. Change de personnage et ouvre le passage.',
+  ['Vue de la libellule','Grenouille au sol','Levier rond','Levier en croix'],[0,1,3],'Le levier en croix ouvre le chemin.');
+sequence('deux-faces','mine','Les cristaux à retourner','Retourne le cristal A pour entrer. Une fois dans la galerie, retourne B pour ouvrir la sortie.',
+  ['Retourner A','Entrer','Retourner B','Sortir'],[0,1,2,3],'Chaque face agit sur une porte différente.');
+choices('dialogue','rythme','Le dialogue des tambours','Un personnage joue Do, Mi. Ta réponse choisit le spectacle.',
+  ['Quelle fin veux-tu jouer ?', ['Sol — danse des grenouilles','Do — averse de pétales'],[0,1],'Les deux réponses ouvrent une scène différente.']);
+atelier('guide-suivant','jardin','Le guide de la prochaine partie','Laisse trois indices sur cet appareil. La prochaine personne pourra les révéler un par un.',[
+  ['Indice de l’étang'],['Indice de la mine'],['Indice du sentier']
+], 'indices-prives');
+sequence('sauts','etang','La traversée en trois sauts','Programme trois sauts, puis lance-les. Le lotus lisse s’enfonce après le premier saut.',
+  ['Lotus rayé','Lotus dentelé','Lotus lisse','Rive finale'],[0,1,3],'Évite le lotus lisse et termine sur la rive.');
+choices('courrier','etang','Le courrier des grenouilles','Trois lettres, trois adresses.',
+  ['La première personne vit près des roseaux.', ['Maison du moulin','Maison des roseaux'],1,'Lis le nom du lieu.'],
+  ['La deuxième habite deux cases à gauche du moulin.', ['Adresse à gauche à deux cases','Adresse à droite à deux cases'],0,'Seule la première adresse est à gauche.'],
+  ['La dernière est la gardienne du jardin.', ['Maison du bassin','Maison à l’entrée du jardin'],1,'Cherche l’adresse du jardin.']);
+sequence('mots','mine','Les mots de cristal','Assemble l’instruction qui fait franchir la pierre à la grenouille : « Saute par-dessus la pierre ». ',
+  ['la pierre','Saute','derrière','par-dessus'],[1,3,0],'Le verbe vient en premier.');
+choices('refrain','rythme','Le refrain à réparer','La partition complète monte Do, Mi, Sol puis revient sur Mi.',
+  ['Il manque une note : Do, …, Sol, Mi.', ['Sol','Do','Mi'],2,'La deuxième note est Mi.']);
+atelier('histoire','jardin','Le jardin à raconter','Écris une petite histoire en trois scènes. Tu peux la relire ou écouter la synthèse de ton appareil.',[
+  ['Une scène à l’étang'],['Une scène à la mine'],['Une scène dans le jardin']
+], 'histoire');
+atelier('concert','rythme','Le concert des pétales','Place trois fleurs. Leur ordre à l’arrivée forme la mélodie de la fête.',[
+  ['Près de la sortie','Lotus Do','Lotus Mi','Lotus Sol'],['Au milieu','Lotus Do','Lotus Mi','Lotus Sol'],
+  ['Loin de la sortie','Lotus Do','Lotus Mi','Lotus Sol']
+], 'musique');
+sequence('gouttes','mine','Le filet des gouttes','Incline la première feuille à gauche vers l’iris, puis la deuxième à droite vers le lotus.',
+  ['Feuille 1 à gauche','Feuille 1 à droite','Feuille 2 à gauche','Feuille 2 à droite'],[0,3],'Iris à gauche, lotus à droite.');
+sequence('escargots','etang','Le détour des escargots','Mousse passe sous la feuille basse. Galet grimpe sur les pierres. Guide-les dans cet ordre.',
+  ['Mousse sous la feuille','Mousse sur les pierres','Galet sous la feuille','Galet sur les pierres'],[0,3],'Chacun a son propre chemin.');
+atelier('carte','jardin','Les défis à la carte','Choisis deux lieux. Un défi de chaque lieu sera proposé à la suite.',[
+  ['Premier lieu','Étang','Mine','Sentier','Jardin'],['Deuxième lieu','Mine','Sentier','Étang','Jardin']
+], 'carte-defis');
+atelier('fete','jardin','La fête à ton image','Prépare la fête et retrouve les éléments que tu as débloqués au fil des défis.',[
+  ['Lanternes','Près du bassin','Le long du sentier'],['Fleurs','Lotus ivoire','Fleurs pêche'],
+  ['Mélodie','Do → Mi → Sol','Sol → Mi → Do']
+], 'fete');
+choices('conseil','jardin','Le conseil du jardin','Le pont doit être réparé avant la fête. Ton choix change le trajet de la parade.',
+  ['Quel pont veux-tu construire ?', ['Pont de roseaux — parade sous les saules','Pont de pierres — parade au-dessus du bassin'],[0,1],'Les deux choix mènent à une fin différente.']);
+choices('empreintes','jardin','Les empreintes du matin','Examine les descriptions et retrouve l’animal qui a laissé ces traces.',
+  ['Trace A : trois doigts fins. Trace B : quatre doigts, larges et palmés. Cherche la trace palmée.', ['Trace A — trois doigts fins','Trace B — quatre doigts palmés'],1,'La paume relie les doigts. Agrandir les textes se trouve dans Accessibilité.']);
+atelier('profils','jardin','Un jardin chacun','Sur cet appareil, chacun peut garder ses propres défis, décors, réglages et progression.',[], 'profils');
+atelier('une-main','jardin','Le mode à une main','Rapproche les commandes courantes du bord de ton choix.',[
+  ['Côté','Au centre','À gauche','À droite']
+], 'main');
+atelier('carte-guide','jardin','La carte qui me guide','Lis ton objectif et les directions possibles sous forme de liste.',[], 'guide');
+choices('trois-usages','mine','Le cristal à trois usages','Le même cristal peut devenir trois objets utiles. Choisis la suite que tu veux découvrir.',
+  ['Quelle forme veux-tu lui donner ?', ['Loupe — lire un indice gravé','Cloche — réveiller le passeur','Clé — ouvrir la porte latérale'],[0,1,2],'Chaque objet ouvre sa propre suite.'],
+  ['Le chemin est libre. Que fais-tu ?', ['Poursuivre vers le sentier','Revenir à la rive'],0,'Essaie le nouvel itinéraire.']);
+choices('balancoire','etang','La balançoire des lucioles','À gauche, deux unités. À droite, quatre unités.',
+  ['Équilibre les deux côtés en ajoutant un galet de deux unités.', ['Ajouter à droite : 2 contre 6','Ajouter à gauche : 4 contre 4'],1,'Le côté gauche est moins lourd.']);
+sequence('contretemps','rythme','Le sentier à contretemps','La frise dit 1 Son, 2 Silence, 3 Son, 4 Silence. Avance uniquement pendant les silences.',
+  ['Temps 1 · Son','Temps 2 · Silence','Temps 3 · Son','Temps 4 · Silence'],[1,3],'Les deux temps pairs sont silencieux.');
+atelier('relais','jardin','Le relais familial','Laisse un message à la personne qui reprend ce point de sauvegarde.',[
+  ['Prénom ou pseudo'],['Message pour la suite']
+], 'relais');
+atelier('solution','jardin','Revoir ma solution','Consulte les étapes de tes défis réussis, dans l’ordre de tes gestes.',[], 'solution');
+choices('partager','etang','Les nénuphars à partager','Il y a quatre grenouilles. Un petit nénuphar accueille une grenouille et un grand en accueille trois.',
+  ['Comment répartir toute la famille ?', ['Une sur le petit et trois sur le grand','Deux sur chaque feuille'],0,'Le petit ne porte qu’une grenouille.']);
+sequence('aimants','mine','Les cristaux qui s’attirent','Oriente A et B pour les attirer vers le centre, puis retourne B pour l’envoyer vers la sortie.',
+  ['A attire vers le centre','B attire vers le centre','B repousse vers la sortie'],[0,1,2],'Fais se rejoindre les cristaux avant de les séparer.');
+atelier('danse','rythme','La danse à inventer','Compose une danse en trois temps et rejoue chaque geste sur une frise.',[
+  ['Temps 1','Tourner','Sauter','Taper des pattes'],['Temps 2','Tourner','Sauter','Taper des pattes'],
+  ['Temps 3','Tourner','Sauter','Taper des pattes']
+], 'danse');
+route('marche','etang','Le marché des roseaux','Échange la graine contre du fil ou le galet contre de la résine, puis répare le cerf-volant.',
+  ['Donner la graine','Prendre le fil','Donner le galet','Prendre la résine','Réparer le cerf-volant'],
+  [[0,1,4],[2,3,4]],'Deux échanges sont proposés. Choisis une seule chaîne.');
+sequence('memoire','etang','La carte de mémoire','Au nord se trouve le moulin, à l’est le pont et au sud l’iris. Place-les dans cet ordre. La carte peut être relue dans la consigne.',
+  ['Nord · moulin','Est · pont','Sud · iris','Ouest · cabane'],[0,1,2],'Nord, est, sud.');
+route('eau','etang','Les deux niveaux d’eau','L’étang est bas au départ. Monte l’eau pour rejoindre la rive haute ou baisse-la encore pour entrer dans la galerie.',
+  ['Monter l’eau','Baisser l’eau','Rive haute','Galerie découverte'],[[0,2],[1,3]],'L’action sur l’écluse révèle deux lieux différents.');
+atelier('choeur','rythme','Le chœur des grenouilles','Distribue les trois temps de la frise et écoute le résultat.',[
+  ['Battement 1','Soprano · Sol','Alto · Mi','Basse · Do'],['Battement 2','Soprano · Sol','Alto · Mi','Basse · Do'],
+  ['Battement 3','Soprano · Sol','Alto · Mi','Basse · Do']
+], 'musique');
+sequence('fendu','mine','Le cristal fendu','Joins d’abord les deux bords en vague, puis les deux bords en crochet.',
+  ['Fragment A · vague','Fragment B · crochet','Fragment C · vague','Fragment D · crochet'],[0,2,1,3],'Les bords portent le même nom.');
+sequence('deux-indices','mine','Les énigmes à deux indices','Passez l’iPad entre les indices, puis trouvez ensemble l’ordre des lieux.',
+  ['Moulin','Bassin','Mine'],[1,0,2],'Rond avant vague avant triangle.');
+sequence('passage','etang','Le passage raconté','Tu es sur la rive. À gauche se trouve un lotus, devant un rocher. Depuis le lotus, la rive est à droite.',
+  ['Gauche · lotus','Devant · rocher','Droite · rive'],[0,2],'Évite le rocher et suis les directions décrites.');
+choices('erreurs','jardin','Le musée des erreurs','Retrouve l’erreur de la grenouille dans chacun des trois chapitres.',
+  ['Son chemin passe par un lotus, puis l’eau, puis la rive. Que remplacer ?', ['La case d’eau par un lotus','La rive par de l’eau'],0,'La grenouille doit passer de lotus en lotus.'],
+  ['Elle a pris la pierre grise au lieu du cristal brillant.', ['Garder la pierre','Prendre le cristal brillant'],1,'Le cristal donne une note.'],
+  ['Elle a joué Do, Sol, Mi au lieu de Do, Mi, Sol.', ['Permuter Mi et Sol','Permuter Do et Mi'],0,'Les deux dernières notes ont été interverties.']);
+route('recoltes','jardin','Les récoltes à partager','Chaque panier doit avoir exactement deux fruits, dont une pomme et une poire. Attribue les fruits du premier puis du deuxième panier.',
+  ['Pomme panier A','Poire panier A','Pomme panier B','Poire panier B'],
+  [[0,1,2,3],[1,0,2,3],[0,1,3,2],[1,0,3,2]],'Les deux ordres sont possibles dans chaque panier.');
+choices('devinettes','etang','Le sentier des devinettes','Résous une devinette pour trouver chaque embranchement.',
+  ['Mon bord ressemble à des petites dents. Où tourner ?', ['Feuille dentelée','Pierre lisse'],0,'Le mot dentelée décrit un bord avec des dents.'],
+  ['Je suis plate, grise et je ne pousse pas.', ['Feuille ronde','Pierre plate'],1,'Ce n’est pas une plante.']);
+choices('vent','etang','L’empreinte du vent','Deux fanions pointent vers l’est. L’îlot est au centre du bassin.',
+  ['Où lâcher la graine pour qu’elle dérive jusqu’à l’îlot ?', ['À l’est de l’îlot','À l’ouest de l’îlot'],1,'Le vent porte la graine d’ouest en est.']);
+route('inverse','mine','Le défi inversé','Les portes A, B et C sont toutes ouvertes. Le levier court ouvre A et B. Le levier long ouvre C. Deux ordres fonctionnent.',
+  ['Levier court','Levier long','Vérifier les portes'],[[0,1,2],[1,0,2]],'Les leviers sont indépendants.');
+
+const locations = {etang:'Étang',mine:'Mine',rythme:'Sentier',jardin:'Jardin'};
+const challengeById = new Map(challenges.map(item => [item.id,item]));
+const allowedKeys = new Set(challengeById.keys());
+const gameUndo = [];
+const $content = $('defis-content');
+let progress = {};
+let profiles = [];
+let activeProfile = 'default';
+let current;
+let selectedQueue = [];
+let hintLevel = 0;
+let playing = false;
+let playToken = 0;
+let recordVersion = 0;
+
+function validateProgress(value) {
+  const entries = Object.entries(value || {}).filter(([id, item]) =>
+    allowedKeys.has(id) && item && typeof item === 'object');
+  return Object.fromEntries(entries.map(([id,item]) => [id,{
+    moves:Array.isArray(item.moves) ? item.moves.filter(n => Number.isInteger(n) && n >= 0 && n < 50).slice(0,30) : [],
+    index:Number.isInteger(item.index) && item.index > 0 && item.index < 20 ? item.index : 0,
+    done:item.done === true,
+    values:Array.isArray(item.values) ? item.values.filter(s => typeof s === 'string').slice(0,8).map(s => s.slice(0,280)) : []
+  }]));
+}
+function applySettings() {
+  for (const key of Object.keys(settings)) {
+    $(key).checked = settings[key];
+    if (key !== 'sound') document.body.classList.toggle(key,settings[key]);
+  }
+  const side = record('une-main').values[0];
+  document.body.dataset.commandSide = side === 'À gauche' ? 'left' : side === 'À droite' ? 'right' : 'center';
+}
+function snapshotProfile() {
+  const profile = profiles.find(item => item.id === activeProfile);
+  if (profile) Object.assign(profile,{game,settings,progress});
+}
+function loadChallenges() {
+  try {
+    const state = JSON.parse(localStorage.getItem(storageKey))?.challenges;
+    progress = validateProgress(state?.progress);
+    if (Array.isArray(state?.profiles)) {
+      profiles = state.profiles.filter(item => item && typeof item.id === 'string' && typeof item.name === 'string')
+        .slice(0,12).map(item => ({...item,progress:validateProgress(item.progress)}));
+    }
+    if (!profiles.some(p => p.id === 'default')) profiles.unshift({id:'default',name:'Mon jardin'});
+    activeProfile = profiles.some(p => p.id === state?.activeProfile) ? state.activeProfile : 'default';
+    snapshotProfile();
+  } catch {
+    profiles = [{id:'default',name:'Mon jardin'}];
+    $('defis-storage').textContent = 'Impossible de lire les découvertes sauvegardées.';
+  }
+}
+function switchProfile(id) {
+  const profile = profiles.find(item => item.id === id);
+  if (!profile || id === activeProfile) return;
+  snapshotProfile();
+  activeProfile = id;
+  game = profile.game && atMostInteger(profile.game.chapter,3) && Array.isArray(profile.game.found)
+    ? profile.game : freshGame();
+  settings = {...{large:false,contrast:false,sound:false},...profile.settings};
+  progress = validateProgress(profile.progress);
+  gameUndo.length = 0;
+  $('feedback').textContent = '';
+  $('play').hidden = true;
+  $('begin').hidden = false;
+  $('begin').textContent = game.chapter || game.position ? 'Reprendre l’aventure' : 'Commencer l’aventure';
+  renderGame();
+  applySettings();
+  updateChallenges();
+  save();
+  openChallenge('profils');
+}
+function record(id) {
+  return Object.hasOwn(progress,id) ? progress[id] : {moves:[],index:0,done:false,values:[]};
+}
+function writeRecord(entry) {
+  progress[current.id] = entry;
+  updateChallenges();
+  save();
+}
+function addElement(tag, value, parent = $content) {
+  const el = document.createElement(tag);
+  if (value) el.textContent = value;
+  parent.append(el);
+  return el;
+}
+function action(label, callback, parent = $content) {
+  const control = addElement('button',label,parent);
+  control.type = 'button';
+  control.addEventListener('click',callback);
+  return control;
+}
+function gameList(items,parent = $content) {
+  const list = addElement('ol','',parent);
+  for (const item of items) addElement('li',item,list);
+  return list;
+}
+function speakText(value) {
+  if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
+    $('defis-status').textContent = 'Lecture vocale indisponible. La consigne reste affichée.';
+    return;
+  }
+  try {
+    const utterance = new window.SpeechSynthesisUtterance(value);
+    utterance.lang = 'fr-BE';
+    utterance.onerror = () => { $('defis-status').textContent = 'La lecture vocale n’a pas démarré.'; };
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  } catch {
+    $('defis-status').textContent = 'Lecture vocale indisponible.';
+  }
+}
+function updateChallenges() {
+  const count = Object.values(progress).filter(item => item.done).length;
+  $('defis-count').textContent = count + ' découvertes sur ' + challenges.length + '.';
+  $('defis-empty').hidden = count > 0;
+  $('defis-records').replaceChildren();
+  for (const item of challenges.filter(item => record(item.id).done)) {
+    const row = addElement('li','',$('defis-records'));
+    action(item.title,() => openChallenge(item.id),row);
+  }
+  for (const option of $('defis-picker').options) {
+    const item = challengeById.get(option.value);
+    option.textContent = item.title + (record(item.id).done ? ' · terminé' : '');
+  }
+}
+function populatePicker() {
+  const filter = $('defis-filter').value;
+  const picker = $('defis-picker');
+  picker.replaceChildren();
+  for (const item of challenges.filter(item => filter === 'all' || filter === item.place)) {
+    addElement('option',item.title,picker).value = item.id;
+  }
+  updateChallenges();
+}
+function openChallenge(id, keepQueue = false) {
+  if (!challengeById.has(id)) return;
+  current = challengeById.get(id);
+  if (!keepQueue) selectedQueue = [];
+  playing = false;
+  playToken++;
+  hintLevel = 0;
+  $('defis-panel').hidden = false;
+  $('defis-name').textContent = current.title;
+  $('defis-story').textContent = current.intro;
+  $('defis-status').textContent = '';
+  const picker = $('defis-picker');
+  if (![...picker.options].some(option => option.value === id)) {
+    $('defis-filter').value = 'all';
+    populatePicker();
+  }
+  picker.value = id;
+  renderChallenge();
+  $('defis-name').focus();
+}
+function publishedAnswer(value) {
+  const match = value.match(/\b(Do|Mi|Sol)\b/);
+  return match?.[0] || {Tambour:'Do',Roseau:'Mi',Cloche:'Sol',Lamelle:'Sol'}[value];
+}
+function resultMessage(item,entry) {
+  if (item.steps && item.steps.some(step => Array.isArray(step[2]))) {
+    return 'Ton choix · ' + item.steps[0][1][entry.moves[0]];
+  }
+  if (item.id === 'escargots') return 'Mousse et Galet ont rejoint le jardin.';
+  if (item.id === 'gouttes') return 'L’iris et le lotus ont reçu de l’eau.';
+  const endings = {
+    'deux-chemins':['La porte des échos s’ouvre.','Tu arrives par les sources.'],
+    'second-regard':['La luciole illumine la galerie.','La libellule dépasse les roseaux.'],
+    eau:['L’eau monte. Tu atteins la rive haute.','L’eau baisse. L’entrée de la galerie apparaît.'],
+    'echos-passage':['Le lotus rond résonne : Mi, Do.','Le lotus dentelé résonne : Sol, Mi.']
+  };
+  if (endings[item.id]) return endings[item.id][entry.moves[0]];
+  if (item.id === 'graines') return entry.moves[1] === 1
+    ? 'Ta graine a formé un pont. Une pousse rejoint le jardin.'
+    : 'Ta graine a éclairé la mine. Une pousse rejoint le jardin.';
+  return 'Défi réussi. Découverte ajoutée au carnet.';
+}
+function advance(entry) {
+  hintLevel = 0;
+  writeRecord(entry);
+  renderChallenge(true);
+  $('defis-status').textContent = entry.done ? resultMessage(current,entry) : 'Bon geste. À toi de jouer la suite.';
+}
+function renderChallenge(focus = false) {
+  const entry = record(current.id);
+  $content.replaceChildren();
+  const isPuzzle = Boolean(current.steps || current.labels || current.kind === 'indices');
+  $('defis-undo').hidden = !isPuzzle || entry.moves.length === 0;
+  $('defis-hint').hidden = !isPuzzle || entry.done;
+  $('defis-read').hidden = false;
+  if (current.steps) renderChoices(current,entry);
+  else if (current.labels) renderSequence(current,entry);
+  else renderAtelier(current,entry);
+  if (entry.done && selectedQueue.length) {
+    action('Continuer avec le deuxième défi',() => openChallenge(selectedQueue.shift(),true));
+  }
+  if (focus) ($content.querySelector('[data-step], button') || $('defis-name')).focus();
+}
+function renderChoices(item,entry) {
+  if (entry.done) {
+    addElement('p',resultMessage(item,entry));
+    gameList(entry.moves.map((move,step) => item.steps[step]?.[1][move]).filter(Boolean));
+    return;
+  }
+  const [prompt,options,correct] = item.steps[entry.index] || item.steps[0];
+  const description = addElement('p',prompt);
+  description.tabIndex = -1;
+  description.setAttribute('data-step','');
+  const group = addElement('div','');
+  group.className = 'actions play-actions';
+  options.forEach((label,i) => action(label,() => {
+    const valid = Array.isArray(correct) ? correct.includes(i) : i === correct;
+    if (!valid) {
+      $('defis-status').textContent = 'Essaie un autre choix. Tes étapes précédentes sont conservées.';
+      return;
+    }
+    const index = entry.index + 1;
+    advance({...entry,index,done:index === item.steps.length,moves:[...entry.moves,i]});
+  },group));
+}
+function renderSequence(item,entry) {
+  if (item.id === 'deux-indices' && !entry.done) {
+    const first = addElement('details','');
+    addElement('summary','Indice 1 · personne 1',first);
+    addElement('p','L’ordre est rond, vague, triangle.',first);
+    const second = addElement('details','');
+    addElement('summary','Indice 2 · personne 2',second);
+    addElement('p','Rond = bassin, vague = moulin, triangle = mine.',second);
+    for (const detail of [first,second]) {
+      detail.addEventListener('toggle',() => {
+        if (detail.open) (detail === first ? second : first).open = false;
+      });
+    }
+  }
+  addElement('p',entry.done ? resultMessage(item,entry) :
+    'Gestes : ' + entry.moves.length + ' sur ' + item.answer.length + '.');
+  if (entry.moves.length) gameList(entry.moves.map(n => item.labels[n]).filter(Boolean));
+  if (entry.done) return;
+  const group = addElement('div','');
+  group.className = 'actions play-actions';
+  const planned = item.id === 'sauts';
+  item.labels.forEach((label,i) => {
+    const control = action(label,() => {
+      const moves = [...entry.moves,i];
+      const matches = (item.accepted || [item.answer]).some(set => moves.every((n,j) => n === set[j]));
+      if (!planned && !matches) {
+        $('defis-status').textContent = 'Ce geste ne convient pas à cette étape. Essaie un autre.';
+        return;
+      }
+      const note = publishedAnswer(label);
+      if (note) playNote(note);
+      advance({...entry,moves,done:!planned && moves.length === item.answer.length});
+    },group);
+    control.disabled = planned && entry.moves.length >= item.answer.length;
+  });
+  if (planned && entry.moves.length === item.answer.length) {
+    action('Lancer les sauts',() => {
+      if (entry.moves.every((n,i) => n === item.answer[i])) advance({...entry,done:true});
+      else $('defis-status').textContent = 'La grenouille n’atteint pas la rive. Annule un saut ou recommence.';
+    },group);
+  }
+}
+function finishAtelier(values = []) {
+  writeRecord({...record(current.id),values,done:true});
+  applySettings();
+  $('defis-status').textContent = 'Enregistré sur cet appareil.';
+}
+function renderGuide() {
+  const position = 'Ligne ' + (Math.floor(game.position/4)+1) + ', colonne ' + (game.position%4+1) + '.';
+  const objectives = ['Rejoindre la dernière case.','Retrouver les trois cristaux.','Rejouer les notes découvertes.','Ton jardin est ouvert.'];
+  const options = [titles[game.chapter],objectives[game.chapter]];
+  if (game.chapter < 2) {
+    options.push(position);
+    const allowed = i => connected(game.position,i) && (game.chapter === 0 ? pond.has(i) : !rocks.has(i));
+    const directions = [[-4,'Haut'],[-1,'Gauche'],[1,'Droite'],[4,'Bas']];
+    for (const [delta,label] of directions) {
+      const index = game.position + delta;
+      if (index >= 0 && index < 16 && allowed(index)) options.push(label + ' · ligne ' + (Math.floor(index/4)+1) + ', colonne ' + (index%4+1));
+    }
+  }
+  if (game.chapter === 2) options.push('Il reste ' + (3-game.rhythm) + ' notes.');
+  gameList(options);
+  action('Écouter le point de passage',() => speakText(options.join('. ')));
+  action('Retourner à mon aventure',() => {
+    finishAtelier();
+    showPage('aventure');
+    $('begin').hidden = true;
+    $('play').hidden = false;
+    renderGame();
+    $('chapter').focus();
+  });
+}
+function renderProfiles() {
+  const form = addElement('form','');
+  const label = addElement('label','Créer un jardin',form);
+  label.htmlFor = 'defis-profile-name';
+  const name = addElement('input','',form);
+  name.id = label.htmlFor;
+  name.required = true;
+  name.maxLength = 30;
+  name.autocomplete = 'off';
+  const create = addElement('button','Créer et ouvrir',form);
+  create.type = 'submit';
+  form.addEventListener('submit',event => {
+    event.preventDefault();
+    const value = name.value.trim();
+    if (!value || profiles.length >= 12 || profiles.some(p => p.name.toLowerCase() === value.toLowerCase())) {
+      $('defis-status').textContent = 'Choisis un autre nom. Cet appareil peut garder jusqu’à 12 jardins.';
+      return;
+    }
+    const id = 'jardin-' + Date.now() + '-' + (++recordVersion);
+    profiles.push({id,name:value});
+    finishAtelier();
+    switchProfile(id);
+    finishAtelier();
+    renderChallenge();
+  });
+  const group = addElement('div','');
+  group.className = 'actions';
+  for (const profile of profiles) {
+    const button = action(profile.name,() => switchProfile(profile.id),group);
+    button.disabled = profile.id === activeProfile;
+  }
+}
+function playMelody(values) {
+  const notes = values.flatMap(value => value.includes('→') ? value.split('→') : [value])
+    .map(publishedAnswer).filter(Boolean);
+  if (!notes.length || playing) return;
+  const tempo = record('rythme-accessible').values[0];
+  const gap = {Lent:850,Normal:500,Rapide:330}[tempo] || 500;
+  const soundOn = settings.sound;
+  const token = ++playToken;
+  playing = true;
+  const readNote = i => {
+    if (token !== playToken || $('defis').hidden) {
+      if (token === playToken) playing = false;
+      return;
+    }
+    if (i === notes.length) {
+      $('defis-status').textContent = 'Fin de la mélodie · ' + notes.join(' → ');
+      playing = false;
+      return;
+    }
+    const visualOnly = record('rythme-accessible').values[1] === 'Symboles et noms';
+    if (soundOn && !visualOnly) playNote(notes[i]);
+    $('defis-status').textContent = 'Temps ' + (i+1) + ' · ' + ['●','▲','◆'][noteNames.indexOf(notes[i])] + ' ' + notes[i];
+    setTimeout(() => readNote(i+1),gap);
+  };
+  readNote(0);
+}
+function downloadCard(lines) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1000;
+  canvas.height = 620;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  ctx.fillStyle = '#fff4e5';
+  ctx.fillRect(0,0,1000,620);
+  ctx.fillStyle = '#d6e0cb';
+  ctx.fillRect(45,45,910,530);
+  ctx.fillStyle = '#362519';
+  ctx.font = 'bold 56px Georgia';
+  ctx.fillText('LOTUS Défis',90,145);
+  ctx.font = '32px Georgia';
+  let y = 225;
+  for (const line of lines) {
+    let chunk = '';
+    for (const char of line) {
+      if (ctx.measureText(chunk + char).width > 810 || char === '\n') {
+        ctx.fillText(chunk,90,y);
+        y += 43;
+        chunk = '';
+      }
+      if (char !== '\n') chunk += char;
+    }
+    ctx.fillText(chunk,90,y);
+    y += 55;
+  }
+  const link = document.createElement('a');
+  link.download = 'carte-lotus-defis.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+function showSolution() {
+  const attempts = challenges.filter(item => item.id !== current.id && record(item.id).done && record(item.id).moves.length);
+  if (!attempts.length) addElement('p','Termine un défi à gestes ou à choix pour revoir ta solution.');
+  for (const item of attempts) {
+    const details = addElement('details','');
+    addElement('summary',item.title,details);
+    const moves = record(item.id).moves.map((n,i) => item.steps ? item.steps[i]?.[1][n] : item.labels?.[n]).filter(Boolean);
+    let index = 0;
+    const text = addElement('p','Prêt à revoir la solution.',details);
+    text.setAttribute('role','status');
+    action('Geste suivant',() => {
+      if (index >= moves.length) index = 0;
+      text.textContent = 'Geste ' + (index+1) + ' sur ' + moves.length + ' · ' + moves[index++];
+      if (!record(current.id).done) {
+        finishAtelier();
+        $('defis-status').textContent = '';
+      }
+    },details);
+  }
+}
+function visibleResult(kind,values) {
+  if (kind === 'jardin') {
+    const picture = addElement('div','',$content);
+    picture.className = 'garden-preview';
+    picture.setAttribute('aria-label','Ton jardin');
+    for (const value of values) addElement('span','❧ ' + value,picture);
+  }
+  if (kind === 'fete') {
+    const picture = addElement('div','',$content);
+    picture.className = 'garden-preview';
+    const guests = record('escargots').done ? 'Mousse et Galet sont arrivés.' : 'La grenouille attend ses invités.';
+    const flowers = record('gouttes').done ? 'L’iris et le lotus ont fleuri.' : 'Les fleurs décorent le bassin.';
+    const tune = record('concert').values;
+    for (const part of [values[0],values[1],guests,flowers,record('conseil').done
+      ? 'Parade · ' + challengeById.get('conseil').steps[0][1][record('conseil').moves[0]] : 'La parade longe le jardin.']) addElement('span',part,picture);
+    action('Jouer la mélodie de la fête',() => playMelody(tune.length ? tune : [values[2]]),picture);
+  }
+  if (kind === 'niveau') {
+    let position = 0;
+    const board = ['Départ',...values.slice(1),'Arrivée'];
+    const group = addElement('div','');
+    group.className = 'editor-board';
+    group.setAttribute('role','group');
+    group.setAttribute('aria-label','Plateau · ' + values[0]);
+    const status = addElement('p','Position : départ.');
+    status.setAttribute('role','status');
+    action('Revenir au départ',() => {
+      position = 0;
+      status.textContent = 'Position : départ.';
+      group.children[0].focus();
+    });
+    board.forEach((tile,i) => action('Case ' + (i+1) + ' · ' + tile,() => {
+      if (i === position) return;
+      const distance = Math.abs(Math.floor(i/3)-Math.floor(position/3)) + Math.abs(i%3-position%3);
+      if (distance !== 1 || tile === 'Rocher' || tile === 'Eau') {
+        status.textContent = 'Ce passage est bloqué. Essaie une autre case voisine.';
+        return;
+      }
+      position = i;
+      status.textContent = tile === 'Arrivée' ? 'Niveau réussi !' : 'Position : case ' + (i+1) + '.';
+    },group));
+  }
+  if (kind === 'tenue') {
+    const frog = addElement('div','🐸');
+    frog.className = 'garden-preview';
+    addElement('span','Foulard ' + values[0],frog);
+    addElement('span',values[1],frog);
+  }
+  if (kind === 'carte') {
+    addElement('p',values.join(' · '));
+    action('Enregistrer la carte en image',() => downloadCard(values));
+  }
+  if (kind === 'histoire') {
+    gameList(values);
+    action('Écouter mon histoire',() => speakText(values.join('. ')));
+  }
+  if (kind === 'indices-prives') {
+    values.forEach((value,i) => {
+      const detail = addElement('details','');
+      addElement('summary','Révéler l’indice ' + (i+1),detail);
+      addElement('p',value,detail);
+    });
+  }
+  if (kind === 'foulard') {
+    const visited = challenges.filter(item => record(item.id).done && item.id !== current.id).map(item => locations[item.place]);
+    addElement('p','Motif : ' + values[0] + '. Lieux déjà visités : ' + ([...new Set(visited)].join(', ') || 'aucun') + '.');
+  }
+  if (kind === 'relais') {
+    addElement('p',values.join(' · '));
+    action('Reprendre depuis ce point',() => { showPage('aventure'); $('begin').click(); });
+  }
+  if (kind === 'danse') {
+    const frog = addElement('p','🐸 Prête à danser');
+    frog.setAttribute('role','status');
+    values.forEach((value,i) => action('Temps ' + (i+1) + ' · ' + value,() => {
+      frog.textContent = '🐸 ' + value;
+      frog.dataset.dance = value;
+      frog.getAnimations?.().forEach(animation => animation.cancel());
+      if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+        frog.animate?.(value === 'Tourner' ? [{transform:'rotate(-8deg)'},{transform:'rotate(8deg)'}] :
+          [{transform:'translateY(0)'},{transform:'translateY(-.5rem)'},{transform:'translateY(0)'}],350);
+      }
+    }));
+  }
+  if (kind === 'musique') action('Rejouer ma composition',() => playMelody(values));
+}
+function renderAtelier(item,entry) {
+  if (item.kind === 'profils') return renderProfiles();
+  if (item.kind === 'guide') return renderGuide();
+  if (item.kind === 'solution') return showSolution();
+  if (item.kind === 'indices') {
+    return renderChoices({steps:[['Quelle feuille flotte sur le bassin ?', ['Un lotus','Une pierre'],0,'La plante pousse à la surface.']]},entry);
+  }
+  const form = addElement('form','');
+  const controls = item.fields.map(([name,...values],i) => {
+    const label = addElement('label',name,form);
+    label.htmlFor = 'defis-field-' + i;
+    const input = addElement(values.length ? 'select' : 'input','',form);
+    input.id = label.htmlFor;
+    for (const value of values) addElement('option',value,input).value = value;
+    input.required = true;
+    if (!values.length) input.maxLength = 180;
+    if (entry.values[i]) input.value = entry.values[i];
+    return input;
+  });
+  const bar = addElement('div','',form);
+  bar.className = 'actions play-actions';
+  const submit = addElement('button',item.kind === 'carte-defis' ? 'Lancer ma sélection' : 'Enregistrer',bar);
+  submit.type = 'submit';
+  submit.className = 'primary';
+  if (item.kind === 'tenue' && !record('douceur').done) {
+    addElement('p','Termine « Les défis en douceur » pour déverrouiller les tenues.');
+    for (const input of controls) input.disabled = true;
+    submit.disabled = true;
+  }
+  form.addEventListener('submit',event => {
+    event.preventDefault();
+    const values = controls.map(input => input.value.trim());
+    if (values.some(value => !value)) {
+      $('defis-status').textContent = 'Renseigne tous les champs.';
+      return;
+    }
+    finishAtelier(values);
+    if (item.kind === 'carte-defis') {
+      const wanted = values.map(value => Object.keys(locations).find(key => locations[key] === value));
+      const pick = (place,exclude) => {
+        const pool = challenges.filter(option => option.place === place && option.id !== exclude && (option.steps || option.labels));
+        return (pool.find(option => !record(option.id).done) || pool[0]).id;
+      };
+      const first = pick(wanted[0]);
+      selectedQueue = [pick(wanted[1],first)];
+      openChallenge(first,true);
+      return;
+    }
+    renderChallenge(true);
+  });
+  if (entry.done && entry.values.length) visibleResult(item.kind,entry.values);
+}
+
+$('defis-filter').addEventListener('change',populatePicker);
+$('defis-start').addEventListener('click',() => openChallenge($('defis-picker').value));
+$('defis-short').addEventListener('click',() => openChallenge('poche'));
+$('defis-read').addEventListener('click',() => {
+  const entry = record(current.id);
+  const prompt = current.steps?.[entry.index]?.[0];
+  speakText([current.intro,prompt].filter(Boolean).join(' '));
+});
+$('defis-reset').addEventListener('click',() => {
+  if (!current) return;
+  if (!window.confirm('Recommencer ce défi et effacer son résultat actuel ?')) return;
+  delete progress[current.id];
+  save();
+  applySettings();
+  updateChallenges();
+  openChallenge(current.id,true);
+});
+$('defis-undo').addEventListener('click',() => {
+  const entry = record(current.id);
+  if (!entry.moves.length) return;
+  hintLevel = 0;
+  advance({...entry,moves:entry.moves.slice(0,-1),index:Math.max(0,entry.index-1),done:false});
+  $('defis-status').textContent = 'Dernier geste annulé.';
+});
+$('defis-hint').addEventListener('click',() => {
+  const entry = record(current.id);
+  if (entry.done) return;
+  if (record('modes').values[0]?.startsWith('Défi') && !entry.moves.length &&
+      !$('defis-status').textContent.startsWith('Essaie') &&
+      !$('defis-status').textContent.startsWith('Ce geste') && hintLevel === 0) {
+    $('defis-status').textContent = 'En mode Défi, essaie un premier geste avant d’ouvrir un indice.';
+    return;
+  }
+  const step = current.steps?.[entry.index] ||
+    (current.kind === 'indices' ? ['', ['Un lotus','Une pierre'],0,'La plante pousse à la surface.'] : null);
+  const options = step ? step[1] : current.labels;
+  const index = step ? [step[2]].flat()[0] :
+    (current.accepted?.find(answer => entry.moves.every((n,i) => n === answer[i])) || current.answer)[entry.moves.length];
+  const tip = step?.[3] || current.hint;
+  const label = options[index];
+  hintLevel = Math.min(3,hintLevel + 1);
+  $('defis-status').textContent = [
+    'Indice 1 · ' + tip,
+    'Indice 2 · Le geste commence par « ' + (label?.slice(0,Math.ceil(label.length/2)) || 'Annuler') + '… ».',
+    'Indice 3 · ' + (label || 'Annule le dernier geste si le parcours est incorrect.')
+  ][hintLevel-1];
+});
+function rememberMove() {
+  gameUndo.push({...game,found:[...game.found]});
+  if (gameUndo.length > 50) gameUndo.shift();
+}
+$('game-undo').addEventListener('click',() => {
+  if (!gameUndo.length) return;
+  game = gameUndo.pop();
+  save();
+  renderGame();
+  $('feedback').textContent = 'Dernier geste annulé.';
+  $('chapter').focus();
+});
+loadChallenges();
+applySettings();
+populatePicker();
+
+</script>
+</body>
+</html>
